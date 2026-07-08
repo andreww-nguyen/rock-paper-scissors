@@ -26,9 +26,26 @@
       Scissors
     </button>
 
+    <button onclick="
+    scores.wins = 0;
+    scores.losses = 0;
+    scores.ties = 0;
+    localStorage.removeItem('scores');
+    ">
+      Reset Score
+    </button>
+
 
 
     <script>
+      // populate scores from local storage
+      let scores = JSON.parse(localStorage.getItem('scores')) || 
+        {
+          wins: 0,
+          losses: 0, 
+          ties: 0
+        }
+        
       function getComputerMove()
       {
         const randNum = Math.random();
@@ -68,13 +85,13 @@
 
               case 'paper':
               {
-                result = 'You lose';
+                result = 'You lose.';
                 break;
               }
 
               case 'scissors':
               {
-                result = 'You win';
+                result = 'You win.';
                 break;
               }
             }
@@ -94,13 +111,13 @@
 
               case 'paper':
               {
-                result = 'Tie';
+                result = 'Tie.';
                 break;
               }
 
               case 'scissors':
               {
-                result = 'You lose';
+                result = 'You lose.';
                 break;
               }
             }
@@ -120,13 +137,13 @@
 
               case 'paper':
               {
-                result = 'You win';
+                result = 'You win.';
                 break;
               }
 
               case 'scissors':
               {
-                result = 'Tie';
+                result = 'Tie.';
                 break;
               }
             }
@@ -134,9 +151,29 @@
           }
         }
 
+
+        // update the score
+        if (result === 'You win.')
+        {
+          scores.wins++;
+        }
+        else if (result === 'You lose.')
+        {
+          scores.losses++;
+        }
+        else if (result ==='Tie.')
+        {
+          scores.ties++;
+        }
+
+        
+        localStorage.setItem('scores', JSON.stringify(scores));
+
         // display the result to the player
-        alert('You picked ' + playerMove + '. Computer picked ' + computerMove + '. ' + result);
+        alert('You picked ' + playerMove + '. Computer picked ' + computerMove + '. ' + result
+          + '\nWins: ' + scores.wins + '. Losses: ' + scores.losses + '. Ties: ' + scores.ties);
       }
+
 
     </script>
   </body>
