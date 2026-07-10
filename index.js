@@ -1,4 +1,4 @@
-// populate scores from local storage
+
 let scores = JSON.parse(localStorage.getItem('scores')) || 
 // populate with default scores if no scores in local storage
   {
@@ -9,7 +9,15 @@ let scores = JSON.parse(localStorage.getItem('scores')) ||
 
 // update scores on the page
 updateScoreElem();
-  
+
+/**
+ * randomizes the computer's move. Utilizes the Math.random()
+ * to generate the randomized move. Depending on the number,
+ * the move will be different.
+ * 
+ * @param: {void}
+ * @return: {string} The randomized move as a string
+ */
 function getComputerMove()
 {
   const randNum = Math.random();
@@ -27,6 +35,16 @@ function getComputerMove()
     return 'scissors';
 }
 
+/**
+ * simulates the rock-paper-scissors game. Depending on the user's move and
+ * computer's move, the result varies. Uses nested switch statements to 
+ * alter the result. Once result is decided, the scores in local storage
+ * are changed. Function also changes on-screen elements (results-container,
+ * scores).
+ * 
+ * @param {string} playerMove the move that the user chose from the button
+ * @return {void}
+ */
 function playGame(playerMove)
 {
   const computerMove = getComputerMove();
@@ -147,6 +165,13 @@ function playGame(playerMove)
 
 }
 
+/**
+ * updates the score element on the page. Retrieves properties from the 
+ * JavaScript 'scores' object.
+ * 
+ * @param {void}
+ * @return {void}
+ */
 function updateScoreElem()
 {
   document.querySelector('.js-scores').innerHTML = 

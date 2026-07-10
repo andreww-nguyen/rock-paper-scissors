@@ -12,7 +12,10 @@
       <p class="page-title">
         Rock Paper Scissors
       </p>
-  
+      
+      <!-- made button-container as a flex element to apply 
+      spaces between the buttons. Each button calls the playGame()
+      function but passes in a different string. -->
       <div class="button-container">
         <button class="move-button" onclick="
         playGame('rock');">
@@ -30,26 +33,34 @@
         </button>
       </div>
       
+      <!-- results container is initially displayed. This is to remove the awkward spacing
+      that occurs when the moves are not displayed yet. The 'displayed' class is added
+      to the results-container when the user makes their first move. This displays the
+      container. -->
       <div class="js-results-container results-container">
         <p class="js-result result"></p>
     
         <div class="moves-container">
+
+          <!-- user's move -->
           <div class="user-move-container">
             <p class="js-user-text user-text"></p>
             <div class="js-user-move user-move"></div>
           </div>
 
+          <!-- computer's move -->
           <div class="computer-move-container">
             <div class="js-computer-move computer-move"></div>
             <p class="js-computer-text computer-text"></p>
           </div>
         </div>
-    
       </div>
-      
+
       <p class="js-scores scores"></p>
   
-  
+      <!-- when button is pressed, set default values of score to 0.
+      When pressed, button also remove item from local storage and
+      hides the results-container -->
       <button class="reset-scores-button" onclick="
       scores.wins = 0;
       scores.losses = 0;
