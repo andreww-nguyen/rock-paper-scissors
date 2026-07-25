@@ -177,3 +177,41 @@ function updateScoreElem()
   document.querySelector('.js-scores').innerHTML = 
     `Wins: ${scores.wins}, Losses: ${scores.losses}, Ties: ${scores.ties}`;
 }
+
+let isAutoPlaying = false;
+let intervalID;
+
+function autoPlay()
+{
+  // if computer is not auto playing, then start auto playing
+  if (!isAutoPlaying)
+  {
+    // repeatedly choose a number and play the game against itself
+    intervalID = setInterval(
+      function() 
+      {
+        const playerMove = getComputerMove();
+        playGame(playerMove); 
+      }, 1000);
+
+    // change flag to true
+    isAutoPlaying = true;
+
+    // change text of button to 'stop playing'
+    setTimeout(function() {
+      document.querySelector('.js-auto-play-button').innerHTML = 'Stop Playing';
+    }, 1000);
+    
+  }
+  else
+  {
+    // stop the autoPlay using the interval ID generated from setInterval
+    clearInterval(intervalID);
+
+    // change flag back to false
+    isAutoPlaying = false;
+
+    // change text inside of button back to original
+    document.querySelector('.js-auto-play-button').innerHTML = 'Auto Play';  
+  }
+}
