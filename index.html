@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="index.css">
 
     <title>Rock Paper Scissors</title>
@@ -17,18 +17,15 @@
       spaces between the buttons. Each button calls the playGame()
       function but passes in a different string. -->
       <div class="button-container">
-        <button class="move-button" onclick="
-        playGame('rock');">
+        <button class="js-rock-button move-button">
           <img class="move-icon" src="icons/rock-emoji.png">
         </button>
     
-        <button class="move-button" onclick="
-        playGame('paper');">
+        <button class="js-paper-button move-button">
           <img class="move-icon" src="icons/paper-emoji.png">
         </button>
     
-        <button class="move-button" onclick="
-        playGame('scissors');">
+        <button class="js-scissors-button move-button">
           <img class="move-icon" src="icons/scissors-emoji.png">
         </button>
       </div>
@@ -62,24 +59,14 @@
       When pressed, button also remove item from local storage and
       hides the results-container -->
       <div class="buttons-container">
-        <button class="reset-scores-button" onclick="
-          scores.wins = 0;
-          scores.losses = 0;
-          scores.ties = 0;
-          localStorage.removeItem('scores');
-          updateScoreElem();
-          document.querySelector('.js-results-container').classList.remove('displayed');
-          ">
+        <button class="js-reset-button reset-scores-button">
             Reset Score
         </button>
   
-        <button class="js-auto-play-button auto-play-button" onclick="
-          autoPlay();">
+        <button class="js-auto-play-button auto-play-button">
           Auto Play
         </button>
       </div>
-      
-  
     </main>
     
     <script src="index.js"></script>
