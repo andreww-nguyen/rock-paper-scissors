@@ -12,16 +12,48 @@ updateScoreElem();
 /**
  * Without creating a function inside addEventListener, the param will be null. 
  * So, we create the function to avoid passing in null and breaking the eventListener.
- * play the game with the player's choice/ move
  */
-document.querySelector('.js-rock-button').addEventListener('click', () => { playGame('rock'); });
-document.querySelector('.js-paper-button').addEventListener('click', () => { playGame('paper'); });
-document.querySelector('.js-scissors-button').addEventListener('click', () => { playGame('scissors'); });
+
+// play the game with the user's move/ choice
+document.querySelector('.js-rock-button').addEventListener('click', () => playGame('rock'));
+document.querySelector('.js-paper-button').addEventListener('click', () => playGame('paper'));
+document.querySelector('.js-scissors-button').addEventListener('click', () => playGame('scissors'));
+
+// enable auto-play when the user clicks the button
+document.querySelector('.js-auto-play-button').addEventListener('click', () => autoPlay());
+
+// reset the scores with button
+document.querySelector('.js-reset-button').addEventListener('click', (event) => 
+{
+  // stopPropagation() stops event bubbling from occuring. Without it, one click will
+  // trigger the eventListener on the .js-reset-button and the eventListener on the document (seen below).
+  event.stopPropagation();
+
+  // display the overlay and the modal
+  document.querySelector('.js-overlay').classList.add('displayed');
+
+  // determine if the user clicked outside the modal
+  document.addEventListener('click', clickedOutside);
+});
+
+// user selects 'yes'
+document.querySelector('.js-yes-confirmation').addEventListener('click', () =>
+{
+  // reset the score
+  resetScore();
+
+  // hide the modal after resetting the score
+  hideModal();
+});
+
+// user selects 'no'
+document.querySelector('.js-no-confirmation').addEventListener('click', hideModal);
+
 
 // play game with keydown rather than buttons
 document.body.addEventListener('keydown', (event) => 
 {
-  // play the game based off the user's keydown
+  let userChoice = event.key;
   switch (event.key)
   {
     // rock
@@ -33,25 +65,73 @@ document.body.addEventListener('keydown', (event) =>
     // scissors
     case 's': playGame('scissors'); break;
 
-    default: alert("ERROR: Invalid keydown: " + event.key.toUpperCase() + 
-      "\nPlease input 'r' (rock), 'p' (paper), or 's' (scissors)."); break;
+    // auto play
+    case 'a': autoPlay(); break;
+
+    // reset scores
+    case 'Backspace':
+    {
+      // display the overlay and the modal
+      document.querySelector('.js-overlay').classList.add('displayed');
+
+      // determine if the user clicked outside the modal
+      document.addEventListener('click', clickedOutside);
+      break;
+    }
+
+    // default: alert("ERROR: Invalid keydown: " + event.key.toUpperCase() + 
+    //   "\nPlease input 'r' (rock), 'p' (paper), or 's' (scissors)."); break;
+  }
+
+
+  // keydowns for the reset-scores-confirmation. Not inside switch statement
+  // because we do not want to reset scores unless modal is shown.
+  if (document.querySelector('.js-overlay').classList.contains('displayed') && event.key === 'y')
+  {
+    // reset the score
+    resetScore();
+
+    // hide the modal after resetting the score
+    hideModal();
+  }
+
+  else if (document.querySelector('.js-overlay').classList.contains('displayed') && event.key === 'n')
+  {
+    hideModal();
   }
 
 });
 
-// reset the scores when pressed
-document.querySelector('.js-reset-button').addEventListener('click', () => 
+/**
+ * determines if the user clicked outside the modal. If the user clicked outside,
+ * then the modal is hidden and the eventListener is removed.
+ * 
+ * @param {event} event the event that happened on the page
+ * @return {void} N/A
+ */
+function clickedOutside(event)
 {
-  // reset scores
-  resetScore();
+  // event is not inside the element with ID = 'confirmation-message'
+  if (!document.getElementById('confirmation-message').contains(event.target))
+  {
+    hideModal();
+  }
+}
 
-  // update the score element on the page
-  updateScoreElem();
-
-  // hide the resuls container
-  document.querySelector('.js-results-container').classList.remove('displayed');
-});
-
+/**
+ * hides the modal from view and removes the eventListener on the document
+ * 
+ * @param {void} N/A
+ * @return {void} N/A
+ */
+function hideModal()
+{
+  // remove the 'displayed' class when clicking outside the modal
+  document.querySelector('.js-overlay').classList.remove('displayed');
+  
+  // need to remove the eventListener to stop multiple eventListeners from being created
+  document.removeEventListener('click', clickedOutside);
+}
 
 /**
  * randomizes the computer's move. Utilizes the Math.random()
@@ -93,6 +173,12 @@ function resetScore()
 
   // remove scores from local storage
   localStorage.removeItem('scores');
+
+  // update the scores element on the page
+  updateScoreElem();
+
+  // hide the results container (results and symbol/ move)
+  document.querySelector('.js-results-container').classList.remove('displayed');
 }
 
 /**
@@ -113,81 +199,53 @@ function playGame(move)
   // different cases depending on user's move
   switch (move)
   {
-    case 'rock':
+    case 'rock': // user goes rock
     {
-
       // different cases depending on computer's move
       switch (computerMove)
       {
-        case 'rock':
-        {
-          result = 'Tie.';
-          break;
-        }
+        // computer goes rock
+        case 'rock': result = 'Tie.'; break;
 
-        case 'paper':
-        {
-          result = 'You lose.';
-          break;
-        }
+        // computer goes paper
+        case 'paper': result = 'You lose.'; break;
 
-        case 'scissors':
-        {
-          result = 'You win.';
-          break;
-        }
+        // computer goes scissors
+        case 'scissors': result = 'You win.'; break;
       }
       break;
     }
 
-    case 'paper':
+    case 'paper': // user goes paper
     {
       // different cases depending on computer's move
       switch (computerMove)
       {
-        case 'rock':
-        {
-          result = 'You win.';
-          break;
-        }
+        // computer goes rock
+        case 'rock': result = 'You win.'; break;
 
-        case 'paper':
-        {
-          result = 'Tie.';
-          break;
-        }
+        // computer goes paper
+        case 'paper': result = 'Tie.'; break;
 
-        case 'scissors':
-        {
-          result = 'You lose.';
-          break;
-        }
+        // computer goes scissors
+        case 'scissors': result = 'You lose.'; break;
       }
       break;
     }
 
-    case 'scissors':
+    case 'scissors': // user goes scissors
     {
       // different cases depending on computer's move
       switch (computerMove)
       {
-        case 'rock':
-        {
-          result = 'You lose.';
-          break;
-        }
+        // computer goes rock
+        case 'rock': result = 'You lose.'; break;
 
-        case 'paper':
-        {
-          result = 'You win.';
-          break;
-        }
+        // computer goes paper
+        case 'paper': result = 'You win.'; break;
 
-        case 'scissors':
-        {
-          result = 'Tie.';
-          break;
-        }
+        // computer goes scissors
+        case 'scissors': result = 'Tie.'; break;
       }
       break;
     }
@@ -195,17 +253,11 @@ function playGame(move)
 
   // update the score based on the result
   if (result === 'You win.')
-  {
     scores.wins++;
-  }
   else if (result === 'You lose.')
-  {
     scores.losses++;
-  }
   else if (result ==='Tie.')
-  {
     scores.ties++;
-  }
 
   // store the scores in local storage
   localStorage.setItem('scores', JSON.stringify(scores));
@@ -222,7 +274,6 @@ function playGame(move)
   document.querySelector('.js-user-move').innerHTML = `<img class="move-icon" src="icons/${move}-emoji.png">`;
   document.querySelector('.js-computer-text').innerHTML = 'Computer';
   document.querySelector('.js-computer-move').innerHTML = `<img class="move-icon" src="icons/${computerMove}-emoji.png">`;
-
 }
 
 /**
@@ -240,7 +291,6 @@ function updateScoreElem()
 
 let isAutoPlaying = false;
 let intervalID;
-
 /**
  * plays the game automatically for the user. In essence, the computer is playing against itself
  * 
@@ -280,6 +330,3 @@ function autoPlay()
     document.querySelector('.js-auto-play-button').innerHTML = 'Auto Play';  
   }
 }
-
-// enable auto-play when the user clicks the button
-document.querySelector('.js-auto-play-button').addEventListener('click', () => { autoPlay(); });

@@ -68,10 +68,6 @@ main
   gap: 10px;
 }
 
-.displayed
-{
-  display: flex;
-}
 
 .user-move-container,
 .computer-move-container
@@ -97,7 +93,9 @@ main
 }
 
 .reset-scores-button,
-.auto-play-button
+.auto-play-button,
+.yes-confirmation,
+.no-confirmation
 {
   background-color: white;
   border-style: none;
@@ -105,4 +103,57 @@ main
   padding: 8px 15px;
   cursor: pointer;
   border-radius: 10px;
+}
+
+.overlay
+{
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+.reset-confirmation-container
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 75px;
+
+  align-items: center;
+  padding: 15px;
+  background-color: white;
+  color: black;
+  border-radius: 30px;
+}
+
+.reset-confirmation-title
+{
+  white-space: nowrap;
+}
+
+.reset-confirmation-buttons
+{
+  padding-top: 10px;
+}
+
+.yes-confirmation
+{
+  background-color: rgb(0, 168, 0);
+}
+
+.no-confirmation
+{
+  background-color: rgb(203, 0, 0);
+}
+
+.displayed
+{
+  display: flex;
 }
